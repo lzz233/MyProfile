@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的作品展示页 - 麟之趾</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); /* 渐变背景 */
+        }
+
+        header {
+            background-color: rgba(255, 255, 255, 0.8); /* 半透明背景 */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 1rem;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #333;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #007bff;
+        }
+
+        main {
+            padding-top: 60px;
+        }
+
+        section {
+            padding: 4rem 2rem;
+            background-color: rgba(255, 255, 255, 0.8); /* 半透明背景 */
+            margin: 1rem;
+            border-radius: 10px;
+            position: relative; /* 确保子元素可以绝对定位 */
+        }
+
+        .hero {
+            height: 100vh; /* 全屏高度 */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); /* 清新明快的背景 */
+            color: #333; /* 确保文字颜色为深灰色 */
+        }
+
+        .carousel {
+            width: 80%;
+            max-width: 800px;
+            height: 80vh; /* 全屏高度的80% */
+            background-color: #fff; /* 轮播图区域背景颜色 */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .carousel img, .carousel video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 确保图片和视频按比例填充 */
+            opacity: 0;
+            transition: opacity 1s ease-in-out, transform 0.3s ease-in-out; /* 添加淡入淡出效果和放大效果 */
+            position: absolute; /* 确保图片和视频重叠 */
+            top: 0;
+            left: 0;
+        }
+
+        .carousel img.active, .carousel video.active {
+            opacity: 1;
+        }
+
+        .carousel img:hover, .carousel video:hover, .portfolio-card img:hover {
+            transform: scale(1.05); /* 鼠标悬停时放大 */
+        }
+
+        .carousel h3 {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            color: #fff;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        }
+
+        .cta-button {
+            padding: 0.5rem 1rem;
+            background-color: #0056b3; /* 修改按钮背景颜色 */
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .cta-button:hover {
+            background-color: #003f7f;
+        }
+
+        .profile-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 1rem;
+            cursor: pointer; /* 添加鼠标指针效果 */
+        }
+
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .skills span {
+            background-color: #e9ecef;
+            padding: 0.25rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* 调整网格布局 */
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .portfolio-card img {
+            width: 100%;
+            height: 200px; /* 固定图片高度 */
+            object-fit: cover; /* 确保图片按比例填充 */
+            border-radius: 10px;
+            transition: transform 0.3s ease-in-out; /* 添加放大效果 */
+        }
+
+        .social-links {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .social-links a {
+            text-decoration: none;
+            color: #007bff;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: #0056b3;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: rgba(255, 255, 255, 0.8); /* 半透明背景 */
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+            }
+
+            nav ul {
+                margin-top: 1rem;
+            }
+
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .social-links {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .social-links a {
+            text-decoration: none;
+            color: #007bff;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+            background-color: #fff;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+
+        .social-links a:hover {
+            color: #fff;
+            background-color: #007bff;
+            animation: none;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">我的作品展示页</div>
+            <ul>
+                <li><a href="#home">首页</a></li>
+                <li><a href="#portfolio">作品</a></li>
+                <li><a href="#about">关于我</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home">
+            <div class="hero">
+                <!-- 轮播图将在这里实现 -->
+                <div class="carousel">
+                    <!-- 轮播图内容将通过JavaScript动态添加 -->
+                </div>
+            </div>
+        </section>
+
+        <section id="portfolio">
+            <h2>我的作品</h2>
+            <div class="portfolio-grid">
+                <!-- 作品卡片将通过JavaScript动态添加 -->
+            </div>
+        </section>
+
+        <section id="about">
+            <!-- 更新个人照片的地址 -->
+            <img src="imgs/0.avif" class="profile-photo" id="profile-photo">
+            <h2>关于我</h2>
+            <p>这里是您的个人简介...</p>
+            <div class="skills">
+                <span>深度学习</span>
+                <span>pytorch</span>
+                <span>前端开发</span>
+            </div>
+            <div class="social-links">
+                <a href="https://space.bilibili.com/34874333" target="_blank">我的b站</a>
+                <a href="https://github.com/lzz233" target="_blank">我的Github</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 麟之趾. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 轮播图实现
+            const carousel = document.querySelector('.carousel');
+            const carouselItems = [
+                { video: '1.mp4', title: '【练手】我的bilibili频道片头', url: 'https://www.bilibili.com/video/BV1RK4y1A7jH/' },
+                { image: '1.jpg', title: '论怎样用24倍速写完一张英语试卷', url: 'https://www.bilibili.com/video/BV15b411C7YK/' },
+                { image: '2.jpg', title: '一支vlog记录高三毕业那年的暑假(随意向', url: 'https://www.bilibili.com/video/BV1tf4y1L78u/' },
+                { image: '3.jpg', title: '【图一乐教程】乐高循迹小车DIY-基于乐高头脑风暴', url: 'https://www.bilibili.com/video/BV1Tv411p7HY/' },
+                { image: '4.jpg', title: '"有人还记得鹤观岛的这个小男孩吗"【原神演奏】【风物之诗琴】', url: 'https://www.bilibili.com/video/BV17U4y1m7x9/' },
+                { image: '5.jpg', title: '你的流行摇滚比较钢门.mp4', url: 'https://www.bilibili.com/video/BV1Xm411675H/' },
+                { image: '6.jpg', title: '【自留档】2023年原神海灯节限时任务全程', url: 'https://www.bilibili.com/video/BV1x84y177fg/' },
+                { image: '7.jpg', title: '【音量诉讼】《合成马老C》这也能玩出BUG就离谱!', url: 'https://www.bilibili.com/video/BV15r4y1N7eG/' },
+                { image: '8.jpg', title: '【可灵ai】当原神立绘动起来', url: 'https://www.bilibili.com/video/BV1WogreGELq/' }
+            ];
+
+            let currentSlide = 0;
+            let slideInterval;
+
+            function showSlide(index) {
+                const item = carouselItems[index];
+                const currentActive = carousel.querySelector('.active');
+                if (currentActive) {
+                    currentActive.classList.remove('active');
+                }
+
+                if (item.video) {
+                    const videoElement = document.createElement('video');
+                    videoElement.controls = true;
+                    videoElement.autoplay = true;
+                    videoElement.classList.add('active');
+                    videoElement.innerHTML = `
+                        <source src="${item.video}" type="video/mp4">
+                        您的浏览器不支持视频标签。
+                    `;
+                    carousel.innerHTML = '';
+                    carousel.appendChild(videoElement);
+                    const titleElement = document.createElement('h3');
+                    titleElement.textContent = item.title;
+                    carousel.appendChild(titleElement);
+                    videoElement.addEventListener('ended', nextSlide);
+
+                    // 添加点击事件跳转到指定网址
+                    videoElement.addEventListener('click', () => {
+                        window.open(item.url, '_blank');
+                    });
+                } else {
+                    const imgElement = document.createElement('img');
+                    imgElement.src = item.image;
+                    imgElement.alt = item.title;
+                    imgElement.classList.add('active');
+                    carousel.innerHTML = '';
+                    carousel.appendChild(imgElement);
+                    const titleElement = document.createElement('h3');
+                    titleElement.textContent = item.title;
+                    carousel.appendChild(titleElement);
+                    slideInterval = setTimeout(nextSlide, 4000); // 每4秒切换一次图片
+
+                    // 添加点击事件跳转到指定网址
+                    imgElement.addEventListener('click', () => {
+                        window.open(item.url, '_blank');
+                    });
+                }
+            }
+
+            function nextSlide() {
+                currentSlide = (currentSlide + 1) % carouselItems.length;
+                showSlide(currentSlide);
+            }
+
+            showSlide(currentSlide);
+
+            // 作品集实现
+            const portfolioGrid = document.querySelector('.portfolio-grid');
+            const portfolioItems = [
+                { image: '1.jpg', title: '论怎样用24倍速写完一张英语试卷', url: 'https://www.bilibili.com/video/BV15b411C7YK/' },
+                { image: '2.jpg', title: '一支vlog记录高三毕业那年的暑假(随意向', url: 'https://www.bilibili.com/video/BV1tf4y1L78u/' },
+                { image: '3.jpg', title: '【图一乐教程】乐高循迹小车DIY-基于乐高头脑风暴', url: 'https://www.bilibili.com/video/BV1Tv411p7HY/' },
+                { image: '4.jpg', title: '"有人还记得鹤观岛的这个小男孩吗"【原神演奏】【风物之诗琴】', url: 'https://www.bilibili.com/video/BV17U4y1m7x9/' },
+                { image: '5.jpg', title: '你的流行摇滚比较钢门.mp4', url: 'https://www.bilibili.com/video/BV1Xm411675H/' },
+                { image: '6.jpg', title: '【自留档】2023年原神海灯节限时任务全程', url: 'https://www.bilibili.com/video/BV1x84y177fg/' },
+                { image: '7.jpg', title: '【音量诉讼】《合成马老C》这也能玩出BUG就离谱!', url: 'https://www.bilibili.com/video/BV15r4y1N7eG/' },
+                { image: '8.jpg', title: '【可灵ai】当原神立绘动起来', url: 'https://www.bilibili.com/video/BV1WogreGELq/' }
+            ];
+
+            portfolioItems.forEach(item => {
+                const portfolioCard = document.createElement('div');
+                portfolioCard.classList.add('portfolio-card');
+                portfolioCard.innerHTML = `
+                    <img src="${item.image}" alt="${item.title}">
+                    <h3>${item.title}</h3>
+                `;
+                portfolioGrid.appendChild(portfolioCard);
+
+                // 添加点击事件跳转到指定网址
+                portfolioCard.querySelector('img').addEventListener('click', () => {
+                    window.open(item.url, '_blank');
+                });
+            });
+
+            // 平滑滚动
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // 添加头像点击事件跳转到指定网址
+            document.getElementById('profile-photo').addEventListener('click', () => {
+                window.open('https://space.bilibili.com/34874333', '_blank');
+            });
+        });
+    </script>
+</body>
+</html>
